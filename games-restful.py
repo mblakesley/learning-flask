@@ -1,5 +1,8 @@
+import users
 from flask import Flask, request, jsonify
+from flask_jwt import JWT, jwt_required, current_identity
 from flask_restful import Resource, Api
+
 
 games_list = [
     {
@@ -26,10 +29,11 @@ class Games(Resource):
 
 
 class Game(Resource):
+    # @jwt_required()
     def get(self, name):
         # I don't like that every method here repeats the pattern of calling get_game, then checking result
         # but I don't know how to simplify it, since even if I package the 404, these methods still must check result
-        # django seems to get out of this via `raise`, so the runner must be doing try/catch. Doesn't help me here :-/
+        # django seems to get out of this via `raise`, so runner must automatically try/catch. Doesn't help me here :-/
         game = get_game(name)
         if game:
             return jsonify(game)
@@ -64,6 +68,9 @@ def get_game(name):
 
 
 app = Flask(__name__)
+# app.secret_key = 'lulz'
 api = Api(app)
 api.add_resource(Games, '/games')
 api.add_resource(Game, '/games/<string:name>')
+
+# jwt = JWT(app, users.authenticate, users.identity)  # maps authenticate() to /auth. uses identity() to map JWT to user (via ID).
