@@ -1,5 +1,5 @@
 from werkzeug.security import safe_str_cmp
-from orm_fake import DB
+from models.orm_fake import DB
 
 db = DB()
 

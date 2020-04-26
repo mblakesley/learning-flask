@@ -1,18 +1,8 @@
-import auth
-from flask import Flask, request, jsonify
-from flask_jwt import JWT, jwt_required, current_identity
-from flask_restful import Resource, Api
+from flask import request, jsonify
+from flask_jwt import jwt_required
+from flask_restful import Resource
 
-games_list = [
-    {
-        'name': 'dead-space',
-        'genre': 'survival horror',
-    },
-    {
-        'name': 'portal-2',
-        'genre': 'puzzle platformer',
-    },
-]
+from models.in_memory_list import games_list
 
 
 class Games(Resource):
@@ -60,16 +50,3 @@ def get_game(name):
     for game in games_list:
         if game['name'] == name:
             return game
-    ### I think this works, but why on earth would you do this??
-    # def has_name(game):
-    #     return game['name'] == name
-    # return list(filter(has_name, games_list))
-
-
-app = Flask(__name__)
-app.secret_key = 'lulz'
-api = Api(app)
-api.add_resource(Games, '/games')
-api.add_resource(Game, '/games/<string:name>')
-
-jwt = JWT(app, auth.authenticate, auth.identity)  # maps authenticate() to /auth. uses identity() to map JWT to user (via ID).

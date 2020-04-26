@@ -1,6 +1,6 @@
 import sqlite3
 
-from user import User
+from src.user import User
 
 
 class DB:
@@ -18,5 +18,5 @@ class DB:
         result = self.cursor.execute(f'select * from users where {field}=?', [value])
         row = result.fetchone()
         if not row:
-            raise NameError
+            raise ValueError
         return User(*row)
