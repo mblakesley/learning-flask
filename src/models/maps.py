@@ -1,4 +1,14 @@
+from typing import Optional
+
 from fastapi import HTTPException, status
+from pydantic import BaseModel
+
+
+class MapData(BaseModel):
+    id: Optional[int]
+    name: str
+    author: str
+    published: str
 
 
 class Maps:
@@ -23,8 +33,13 @@ class Maps:
     ]
 
     @classmethod
-    def get_by_id(cls, map_id: int):
+    def get(cls, map_id: int):
         for mappy in cls.maps:
             if mappy.get('id', 0) == map_id:
                 return mappy
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    @classmethod
+    def insert(cls, mapdata: MapData):
+        mapdata.id = len(cls.maps) + 1
+        cls.maps.append(mapdata)

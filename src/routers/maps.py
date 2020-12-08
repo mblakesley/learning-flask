@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from fastapi.routing import APIRouter
 
-from src.models.maps import Maps
+from src.models.maps import Maps, MapData
 
 router = APIRouter()
 
@@ -11,14 +11,20 @@ async def get_maps():
     return Maps.maps
 
 
+@router.post('/maps', status_code=status.HTTP_201_CREATED)
+async def post_maps(data: MapData):
+    Maps.insert(data)
+    return {'message': 'map posted'}
+
+
 @router.get('/maps/{map_id}')
 async def get_map(map_id: int):
-    return Maps.get_by_id(map_id)
+    return Maps.get(map_id)
 
 
 @router.delete('/maps/{map_id}')
 async def delete_map(map_id: int):
-    mappy: dict = Maps.get_by_id(map_id)
+    mappy: dict = Maps.get(map_id)
     Maps.maps.remove(mappy)
     return {'message': 'map deleted'}
 
