@@ -3,8 +3,7 @@ from flask_jwt import JWT
 from flask_restful import Api
 
 from src import auth
-from controllers.games import Games, Game
-
+from src.routers import Games, Game
 
 app = Flask(__name__)
 app.secret_key = 'lulz'
