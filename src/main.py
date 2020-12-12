@@ -7,5 +7,5 @@ app.include_router(maps.router)
 
 
 @app.get('/')
-async def root():
-    return {'message': 'health check complete'}
+async def health_check():
+    return {'message': 'healthy!'}
